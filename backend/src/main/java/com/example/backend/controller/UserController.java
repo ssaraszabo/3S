@@ -5,6 +5,9 @@ import com.example.backend.dto.LoginRequest;
 import com.example.backend.model.User;
 import com.example.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
+
+import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,4 +32,13 @@ public class UserController {
         System.out.println("User signed in successfully: " + signedInUser);
         return ResponseEntity.ok(signedInUser);
     }
+
+    @PostMapping("/profile")
+    public ResponseEntity<ArrayList<String>> getProfileInfo(@RequestParam Long userId) {
+        System.out.println("Received profile info request for user ID: " + userId);
+        ArrayList<String> profileInfo = userService.getProfileInfo(userId);
+        System.out.println("Profile info retrieved successfully: " + profileInfo);
+        return ResponseEntity.ok(profileInfo);
+    }
+
 }
