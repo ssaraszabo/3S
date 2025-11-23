@@ -4,6 +4,9 @@ import com.example.backend.dto.RegisterRequest;
 import com.example.backend.model.User;
 import com.example.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+
+import java.util.ArrayList;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.backend.dto.LoginRequest;
@@ -48,5 +51,22 @@ public class UserService {
 
         user.setPassword(null);
         return user;
+    }
+
+
+    public ArrayList<String> getProfileInfo (Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+
+        ArrayList<String> profileInfo = new ArrayList<>();
+        profileInfo.add(user.getUsername());
+        profileInfo.add(user.getEmail());
+        profileInfo.add(String.valueOf(user.getNrFocusSessions()));
+        profileInfo.add(String.valueOf(user.getTotalFocusTime()));
+        profileInfo.add(String.valueOf(user.getNrFocusSessionsToday()));
+        profileInfo.add(user.getFocusTimeToday());
+        profileInfo.add(user.getAvatar());
+
+        return profileInfo;
     }
 }

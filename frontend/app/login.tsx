@@ -9,6 +9,7 @@ import {
     TouchableOpacity,
     View
 } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const getApiUrl = () => {
     return 'http://192.168.9.168:8080';
@@ -38,7 +39,7 @@ export default function Login() {
       }, 15000);
 
       const requestBody = { email, password };
-      console.log('Request body:', JSON.stringify(requestBody));
+      console.log('Request body:', JSON.stringify({ email, password: '***' })); // Don't log password
 
       const response = await fetch(`${API_URL}/api/users/signin`, {
         method: 'POST',
@@ -53,8 +54,6 @@ export default function Login() {
       clearTimeout(timeoutId);
       const responseText = await response.text();
       console.log('Sign-in status:', response.status);
-      console.log('Sign-in raw body:', responseText);
-      console.log('Response headers:', JSON.stringify([...response.headers]));
 
       let data;
       try {
@@ -65,7 +64,13 @@ export default function Login() {
       }
 
       if (response.ok) {
-        console.log('Sign-in successful:', data);
+        console.log('Sign-in successful for user:', data.username);
+        
+        delete data.password;
+        
+        await AsyncStorage.setItem('userData', JSON.stringify(data));
+        console.log('User data stored successfully');
+        
         router.push('/focusScreen');
       } else {
         console.error('Sign-in failed:', response.status, data);
