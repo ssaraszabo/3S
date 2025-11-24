@@ -16,17 +16,30 @@ import lombok.Setter;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
+    @Column(name = "email", unique = true, nullable = false)
     private @Getter @ Setter String email;
+    @Column(name = "password", nullable = false)
     private @Getter @Setter String password;
+    @Column(name = "username", unique = true, nullable = false)
     private @Getter @Setter String username;
+    @Column(name = "nr_focus_sessions", nullable = false)
     private @Getter @Setter int nrFocusSessions;
+    @Column(name = "total_focus_time", nullable = false)
     private @Getter @Setter int totalFocusTime;
+    @Column(name = "nr_focus_sessions_today", nullable = false)
     private @Getter @Setter int nrFocusSessionsToday;
+    @Column(name = "focus_time_today", nullable = false)
     private @Getter @Setter String focusTimeToday;
-    private @Getter @Setter String avatar;
 
-    public User(String email, String password, String username, int nrFocusSessions, int totalFocusTime, int nrFocusSessionsToday, String focusTimeToday, String avatar) {
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "avatar_id")
+    private Avatar avatar;
+
+
+    public User(String email, String password, String username, int nrFocusSessions, int totalFocusTime, int nrFocusSessionsToday, String focusTimeToday, Avatar avatar) {
         this.email = email;
         this.password = password;
         this.username = username;
