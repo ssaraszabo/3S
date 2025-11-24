@@ -10,6 +10,8 @@ import {
     View
 } from "react-native";
 
+import { useNavigation } from '@react-navigation/native';
+
 import { User } from '../types/user';
 import { generatePositions } from '../utils/positionUtils';
 
@@ -49,6 +51,8 @@ export default function FocusScreen() {
     const [users, setUsers] = useState<User[]>([]);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [showModal, setShowModal] = useState(false);
+
+    const navigation = useNavigation<any>();
 
    useEffect(() => {
         setUsers(mockUsers);
@@ -125,6 +129,19 @@ export default function FocusScreen() {
                         </View>
                     </View>
                 </Modal>
+
+                 
+                <TouchableOpacity
+                    style={styles.stoneButton}
+                    onPress={() => navigation.navigate('userProfile')}
+                >
+                    <Image
+                        source={require('../assets/images/stone.png')}
+                        style={styles.stoneImage}
+                    />
+                </TouchableOpacity>           
+
+
             </View>
         </ImageBackground>
     );
@@ -199,5 +216,28 @@ const styles = StyleSheet.create({
     closeButtonText: {
         color: '#666',
         fontSize: 14,
+    },
+
+    stoneButton: {
+        position: 'absolute',
+        right: 20,
+        bottom: 30,
+        width: 64,
+        height: 64,
+        borderRadius: 32,
+        overflow: 'hidden',
+        elevation: 6, 
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        backgroundColor: 'transparent',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    stoneImage: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'cover',
     },
 });

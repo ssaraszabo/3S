@@ -18,11 +18,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private @Getter @ Setter String email;
     @Column(name = "password", nullable = false)
     private @Getter @Setter String password;
-    @Column(name = "username", unique = true, nullable = false)
+    @Column(name = "username", nullable = false, unique = true)
     private @Getter @Setter String username;
     @Column(name = "nr_focus_sessions", nullable = false)
     private @Getter @Setter int nrFocusSessions;
@@ -32,6 +32,8 @@ public class User {
     private @Getter @Setter int nrFocusSessionsToday;
     @Column(name = "focus_time_today", nullable = false)
     private @Getter @Setter String focusTimeToday;
+    @Column(name = "avatar", nullable = false)
+    private @Getter @Setter String avatar;
 
 
     @ManyToOne(fetch = FetchType.EAGER)
