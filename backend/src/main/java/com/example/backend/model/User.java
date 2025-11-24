@@ -35,7 +35,13 @@ public class User {
     @Column(name = "avatar", nullable = false)
     private @Getter @Setter String avatar;
 
-    public User(String email, String password, String username, int nrFocusSessions, int totalFocusTime, int nrFocusSessionsToday, String focusTimeToday, String avatar) {
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "avatar_id")
+    private Avatar avatar;
+
+
+    public User(String email, String password, String username, int nrFocusSessions, int totalFocusTime, int nrFocusSessionsToday, String focusTimeToday, Avatar avatar) {
         this.email = email;
         this.password = password;
         this.username = username;
