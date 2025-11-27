@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import {
     Dimensions,
     Image,
@@ -15,6 +15,24 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 
 const { width, height } = Dimensions.get('window');
+
+const AVATAR_MAP: { [key: string]: any } = {
+    'avatar1': require('../assets/images/avatar1.png'),
+    'avatar2': require('../assets/images/avatar2.png'),
+    'avatar3': require('../assets/images/avatar3.png'),
+};
+
+const getAvatarImage = (avatarString: any): any => {
+    if (!avatarString || typeof avatarString !== 'string') {
+        return AVATAR_MAP['avatar1']; 
+    }
+
+    
+    const filename = avatarString.split('/').pop(); 
+    const avatarKey = filename?.replace('.png', ''); 
+
+    return AVATAR_MAP[avatarKey!] || AVATAR_MAP['avatar1'];
+};
 
 interface UserProfile {
     id: number;
@@ -36,20 +54,27 @@ export default function UserProfileScreen() {
         fetchUserProfile();
     }, []);
 
+
+    
+    useLayoutEffect(() => {
+        navigation.setOptions({ headerShown: false, title: '' });
+    }, [navigation]);
+
+
     const fetchUserProfile = async () => {
         try {
             setLoading(true);
-            
+
             const userData = await AsyncStorage.getItem('userData');
-            
+
             if (userData) {
                 const parsedUser = JSON.parse(userData);
-                console.log('Loaded user profile:', parsedUser.username);
+                console.log('Loaded user profile:', parsedUser);
                 setProfile(parsedUser);
             } else {
                 console.log('No user data found in storage');
             }
-            
+
             setLoading(false);
         } catch (error) {
             console.error('Error fetching profile:', error);
@@ -118,17 +143,15 @@ export default function UserProfileScreen() {
                     <Text style={styles.backButtonText}>←</Text>
                 </TouchableOpacity>
 
-                {/* Profile Header */}
                 <View style={styles.header}>
                     <Image
-                        source={profile.avatar}
+                        source={getAvatarImage(profile.avatar)}
                         style={styles.avatarLarge}
                     />
                     <Text style={styles.username}>{profile.username}</Text>
                     <Text style={styles.email}>{profile.email}</Text>
                 </View>
 
-                {/* Today's Stats Card */}
                 <View style={styles.card}>
                     <Text style={styles.cardTitle}>Today's Progress</Text>
                     <View style={styles.statsRow}>
@@ -144,7 +167,6 @@ export default function UserProfileScreen() {
                     </View>
                 </View>
 
-                {/* All-Time Stats Card */}
                 <View style={styles.card}>
                     <Text style={styles.cardTitle}>All-Time Stats</Text>
                     <View style={styles.statsRow}>
@@ -162,7 +184,6 @@ export default function UserProfileScreen() {
                     </View>
                 </View>
 
-                {/* Achievements Card */}
                 <View style={styles.card}>
                     <Text style={styles.cardTitle}>Achievements</Text>
                     <View style={styles.achievementsContainer}>
@@ -193,7 +214,6 @@ export default function UserProfileScreen() {
                     </View>
                 </View>
 
-                {/* Action Buttons */}
                 <TouchableOpacity style={styles.actionButton}>
                     <Text style={styles.actionButtonText}>Edit Profile</Text>
                 </TouchableOpacity>
@@ -204,7 +224,7 @@ export default function UserProfileScreen() {
                     </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={[styles.actionButton, styles.logoutButton]}
                     onPress={handleLogout}
                 >
@@ -266,11 +286,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 10,
-        elevation: 5,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 3,
     },
     backButtonText: {
         fontSize: 24,
@@ -288,11 +303,6 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         borderWidth: 4,
         borderColor: 'rgba(255, 255, 255, 0.9)',
-        elevation: 8,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 6,
     },
     username: {
         fontSize: 28,
@@ -309,11 +319,6 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         padding: 20,
         marginBottom: 15,
-        elevation: 5,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
     },
     cardTitle: {
         fontSize: 20,
@@ -374,11 +379,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
         marginBottom: 10,
-        elevation: 3,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 3,
     },
     actionButtonText: {
         color: 'white',

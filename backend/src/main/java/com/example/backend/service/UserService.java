@@ -3,6 +3,7 @@ package com.example.backend.service;
 import com.example.backend.dto.RegisterRequest;
 import com.example.backend.model.Avatar;
 import com.example.backend.model.User;
+import com.example.backend.repository.AvatarRepository;
 import com.example.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.backend.dto.LoginRequest;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -76,8 +78,7 @@ public class UserService {
         profileInfo.add(String.valueOf(user.getTotalFocusTime()));
         profileInfo.add(String.valueOf(user.getNrFocusSessionsToday()));
         profileInfo.add(user.getFocusTimeToday());
-        profileInfo.add(user.getAvatar());
-
+        profileInfo.add(user.getAvatar() != null ? user.getAvatar().getName() : "");
         return profileInfo;
     }
 }

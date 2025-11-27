@@ -1,5 +1,5 @@
-import { router } from 'expo-router';
-import { useState } from 'react';
+import { router, useNavigation } from 'expo-router';
+import { useLayoutEffect, useState } from 'react';
 import {
   Alert,
     ImageBackground,
@@ -21,6 +21,11 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigation = useNavigation<any>();
+
+  useLayoutEffect(() => {
+          navigation.setOptions({ headerShown: false, title: '' });
+      }, [navigation]);
 
   const handleSignIn = async () => {
     if (!email || !password) {

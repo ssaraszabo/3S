@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import {
     Dimensions,
     Image,
@@ -27,21 +27,21 @@ const mockUsers: User[] = [
         id: 1,
         name: "User 1",
         avatar: require('../assets/images/avatar1.png'),
-        focusSessions: 12,
+        focusSessions: 5,
         position: positions[0]
     },
     {
         id: 2,
         name: "User 2",
         avatar: require('../assets/images/avatar2.png'),
-        focusSessions: 8,
+        focusSessions: 11,
         position: positions[1]
     },
     {
         id: 3,
         name: "User 3",
         avatar: require('../assets/images/avatar3.png'),
-        focusSessions: 15,
+        focusSessions: 22,
         position: positions[2]
     },
 ];
@@ -53,6 +53,11 @@ export default function FocusScreen() {
     const [showModal, setShowModal] = useState(false);
 
     const navigation = useNavigation<any>();
+
+    useLayoutEffect(() => {
+        navigation.setOptions({ headerShown: false, title: '' });
+    }, [navigation]);
+
 
    useEffect(() => {
         setUsers(mockUsers);

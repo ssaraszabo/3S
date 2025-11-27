@@ -32,8 +32,7 @@ public class User {
     private @Getter @Setter int nrFocusSessionsToday;
     @Column(name = "focus_time_today", nullable = false)
     private @Getter @Setter String focusTimeToday;
-    @Column(name = "avatar", nullable = false)
-    private @Getter @Setter String avatar;
+   
 
 
     @ManyToOne(fetch = FetchType.EAGER)
