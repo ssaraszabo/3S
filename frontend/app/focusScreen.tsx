@@ -144,7 +144,16 @@ export default function FocusScreen() {
                         source={require('../assets/images/stone.png')}
                         style={styles.stoneImage}
                     />
-                </TouchableOpacity>           
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.saplingButton}
+                    onPress={() => navigation.navigate('avatarMarketplace')}
+                >
+                    <Image
+                        source={require('../assets/images/sapling.png')}
+                        style={styles.saplingImage}
+                    />
+                </TouchableOpacity>             
 
 
             </View>
@@ -241,6 +250,28 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     stoneImage: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'cover',
+    },
+    saplingButton: {
+        position: 'absolute',
+        left: 20,
+        bottom: 30,
+        width: 64,
+        height: 64,
+        borderRadius: 32,
+        overflow: 'hidden',
+        elevation: 6,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        backgroundColor: 'transparent',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    saplingImage: {
         width: '100%',
         height: '100%',
         resizeMode: 'cover',
