@@ -12,7 +12,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const getApiUrl = () => {
-    return 'http://192.168.9.168:8080';
+    return 'http://localhost:8081';
 };
 const API_URL = getApiUrl();
 
@@ -41,7 +41,7 @@ export default function Login() {
       const timeoutId = setTimeout(() => {
         console.log('Sign-in request timed out after 15s');
         controller.abort();
-      }, 15000);
+      }, 60000);
 
       const requestBody = { email, password };
       console.log('Request body:', JSON.stringify({ email, password: '***' })); // Don't log password

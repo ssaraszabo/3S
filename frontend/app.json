@@ -1,6 +1,5 @@
 {
   "expo": {
-    
     "name": "proiectMobile",
     "slug": "proiectMobile",
     "version": "1.0.0",
@@ -12,7 +11,6 @@
     "ios": {
       "supportsTablet": true
     },
-    
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
@@ -39,7 +37,8 @@
             "backgroundColor": "#000000"
           }
         }
-      ]
+      ],
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true,
