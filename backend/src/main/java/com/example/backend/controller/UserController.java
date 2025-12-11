@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 
 import com.example.backend.dto.PasswordChangeRequest;
+import com.example.backend.dto.UsernameChangeRequest;
 
 @RestController
 @RequestMapping("/api/users")
@@ -60,33 +61,59 @@ public class UserController {
     public ResponseEntity<?> changePassword(
             @PathVariable Long userId,
             @RequestBody PasswordChangeRequest request) {
-
         System.out.println("Received password change request for user ID: " + userId);
-
         try {
             userService.changePassword(userId, request.getOldPassword(), request.getNewPassword());
-
             System.out.println("Password changed successfully for user ID: " + userId);
-
             return ResponseEntity.ok(java.util.Collections.singletonMap("message", "Password updated successfully"));
-
         } catch (RuntimeException e) {
             System.err.println("Password change failed for user ID " + userId + ": " + e.getMessage());
-
             String message = e.getMessage() != null ? e.getMessage() : "Unknown error";
-
             if (message.toLowerCase().contains("incorrect old password")) {
                 return ResponseEntity
-                        .status(HttpStatus.UNAUTHORIZED) // 401
+                        .status(HttpStatus.UNAUTHORIZED)
                         .body(java.util.Collections.singletonMap("message", "Incorrect old password."));
             } else if (message.toLowerCase().contains("not found")) {
                 return ResponseEntity
-                        .status(HttpStatus.NOT_FOUND) // 404
+                        .status(HttpStatus.NOT_FOUND)
                         .body(java.util.Collections.singletonMap("message", message));
             } else {
                 return ResponseEntity
                         .status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body(java.util.Collections.singletonMap("message", "Internal server error during password change."));
+            }
+        }
+    }
+
+    @PutMapping("/change-username/{userId}")
+    public ResponseEntity<?> changeUsername(
+            @PathVariable Long userId,
+            @RequestBody UsernameChangeRequest request) {
+        System.out.println("Received username change request for user ID: " + userId + " with new username: " + request.getNewUsername());
+
+        try {
+            userService.changeUsername(userId, request.getNewUsername(), request.getPassword());
+            System.out.println("Username changed successfully for user ID: " + userId);
+            return ResponseEntity.ok(java.util.Collections.singletonMap("newUsername", request.getNewUsername()));
+        } catch (RuntimeException e) {
+            System.err.println("Username change failed for user ID " + userId + ": " + e.getMessage());
+            String message = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
+            if (message.contains("incorrect password")) {
+                return ResponseEntity
+                        .status(HttpStatus.UNAUTHORIZED)
+                        .body(java.util.Collections.singletonMap("message", "Incorrect password provided."));
+            } else if (message.contains("username already exists")) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(java.util.Collections.singletonMap("message", e.getMessage()));
+            } else if (message.contains("not found")) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body(java.util.Collections.singletonMap("message", message));
+            } else {
+                return ResponseEntity
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(java.util.Collections.singletonMap("message", "Internal server error during username change."));
             }
         }
     }

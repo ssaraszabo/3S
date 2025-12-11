@@ -95,4 +95,17 @@ public class UserService {
         user.setPassword(hashedNewPassword);
         userRepository.save(user);
     }
+
+    public void changeUsername(Long userId, String newUsername, String password) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+        if (!verifyPassword(password, user.getPassword())) {
+            throw new RuntimeException("Incorrect password provided");
+        }
+        if (userRepository.existsByUsername(newUsername)) {
+            throw new RuntimeException("Username already exists");
+        }
+        user.setUsername(newUsername);
+        userRepository.save(user);
+    }
 }
