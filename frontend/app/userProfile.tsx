@@ -14,6 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 
+
 const { width, height } = Dimensions.get('window');
 
 const AVATAR_MAP: { [key: string]: any } = {
@@ -24,12 +25,12 @@ const AVATAR_MAP: { [key: string]: any } = {
 
 const getAvatarImage = (avatarString: any): any => {
     if (!avatarString || typeof avatarString !== 'string') {
-        return AVATAR_MAP['avatar1']; 
+        return AVATAR_MAP['avatar1'];
     }
 
-    
-    const filename = avatarString.split('/').pop(); 
-    const avatarKey = filename?.replace('.png', ''); 
+
+    const filename = avatarString.split('/').pop();
+    const avatarKey = filename?.replace('.png', '');
 
     return AVATAR_MAP[avatarKey!] || AVATAR_MAP['avatar1'];
 };
@@ -55,7 +56,7 @@ export default function UserProfileScreen() {
     }, []);
 
 
-    
+
     useLayoutEffect(() => {
         navigation.setOptions({ headerShown: false, title: '' });
     }, [navigation]);
@@ -97,6 +98,7 @@ export default function UserProfileScreen() {
             console.error('Error logging out:', error);
         }
     };
+
 
     if (loading) {
         return (
@@ -151,6 +153,7 @@ export default function UserProfileScreen() {
                     <Text style={styles.username}>{profile.username}</Text>
                     <Text style={styles.email}>{profile.email}</Text>
                 </View>
+
 
                 <View style={styles.card}>
                     <Text style={styles.cardTitle}>Today's Progress</Text>
@@ -214,7 +217,10 @@ export default function UserProfileScreen() {
                     </View>
                 </View>
 
-                <TouchableOpacity style={styles.actionButton}>
+                <TouchableOpacity
+                    style={styles.actionButton}
+                    onPress={() => router.push('/editProfile')}
+                >
                     <Text style={styles.actionButtonText}>Edit Profile</Text>
                 </TouchableOpacity>
 
@@ -234,6 +240,7 @@ export default function UserProfileScreen() {
         </ImageBackground>
     );
 }
+
 
 const styles = StyleSheet.create({
     background: {

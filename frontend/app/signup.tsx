@@ -12,7 +12,7 @@ import {
 } from "react-native";
 
 const getApiUrl = () => {
-    return 'http://192.168.9.168:8080';
+    return 'http://localhost:8081';
 };
 
 const API_URL = getApiUrl();

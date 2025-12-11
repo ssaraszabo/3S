@@ -31,21 +31,21 @@ public class UserService {
 
         User user = new User();
         user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword())); 
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setUsername(request.getUsername());
         user.setNrFocusSessions(0);
         user.setTotalFocusTime(0);
         user.setNrFocusSessionsToday(0);
         user.setFocusTimeToday("0");
         user.setAvatar(avatarService.getDefaultAvatar());
-        
+
         return userRepository.save(user);
     }
 
 
     public User updateAvatarForUser(User user) {
         Avatar unlocked = avatarRepository.findBestBySessions(user.getNrFocusSessions())
-            .orElseGet(() -> avatarService.getDefaultAvatar());
+                .orElseGet(() -> avatarService.getDefaultAvatar());
         user.setAvatar(unlocked);
         return userRepository.save(user);
     }
@@ -80,5 +80,32 @@ public class UserService {
         profileInfo.add(user.getFocusTimeToday());
         profileInfo.add(user.getAvatar() != null ? user.getAvatar().getName() : "");
         return profileInfo;
+    }
+
+
+    public void changePassword(Long userId, String oldPassword, String newPassword) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+
+        if (!verifyPassword(oldPassword, user.getPassword())) {
+            throw new RuntimeException("Incorrect old password provided");
+        }
+
+        String hashedNewPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(hashedNewPassword);
+        userRepository.save(user);
+    }
+
+    public void changeUsername(Long userId, String newUsername, String password) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+        if (!verifyPassword(password, user.getPassword())) {
+            throw new RuntimeException("Incorrect password provided");
+        }
+        if (userRepository.existsByUsername(newUsername)) {
+            throw new RuntimeException("Username already exists");
+        }
+        user.setUsername(newUsername);
+        userRepository.save(user);
     }
 }
